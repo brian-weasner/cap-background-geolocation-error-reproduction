@@ -1,6 +1,7 @@
 import UIKit
 import Capacitor
-
+import TSBackgroundFetch
+	    
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -8,6 +9,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // [capacitor-background-fetch]
+        let fetchManager = TSBackgroundFetch.sharedInstance();
+        fetchManager?.didFinishLaunching();
+        
         return true
     }
 
@@ -44,6 +50,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Feel free to add additional processing here, but if you want the App API to support
         // tracking app url opens, make sure to keep this call
         return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
+    }
+    
+    // [capacitor-background-fetch]
+    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("BackgroundFetchPlugin AppDelegate received fetch event");
+        let fetchManager = TSBackgroundFetch.sharedInstance();
+        fetchManager?.perform(completionHandler: completionHandler, applicationState: application.applicationState);
     }
 
 }
