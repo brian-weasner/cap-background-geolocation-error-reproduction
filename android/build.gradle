@@ -21,8 +21,12 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        // capacitor-background-geolocation
         maven {
-            // capacitor-background-fetch
+            url("${project(':transistorsoft-capacitor-background-geolocation').projectDir}/libs")
+        }
+        // capacitor-background-fetch
+        maven {
             url("${project(':transistorsoft-capacitor-background-fetch').projectDir}/libs")
         }
     }
