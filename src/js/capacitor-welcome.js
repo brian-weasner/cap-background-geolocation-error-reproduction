@@ -1,5 +1,4 @@
 import { SplashScreen } from '@capacitor/splash-screen';
-import { Camera } from '@capacitor/camera';
 
 window.customElements.define(
   'capacitor-welcome',
@@ -22,7 +21,7 @@ window.customElements.define(
       h1, h2, h3, h4, h5 {
         text-transform: uppercase;
       }
-      .button {
+      button {
         display: inline-block;
         padding: 10px;
         background-color: #73B5F6;
@@ -60,30 +59,29 @@ window.customElements.define(
         <h1>Capacitor</h1>
       </capacitor-welcome-titlebar>
       <main>
-        <p>
-          Capacitor makes it easy to build powerful apps for the app stores, mobile web (Progressive Web Apps), and desktop, all
-          with a single code base.
-        </p>
-        <h2>Getting Started</h2>
-        <p>
-          You'll probably need a UI framework to build a full-featured app. Might we recommend
-          <a target="_blank" href="http://ionicframework.com/">Ionic</a>?
-        </p>
-        <p>
-          Visit <a href="https://capacitorjs.com">capacitorjs.com</a> for information
-          on using native features, building plugins, and more.
-        </p>
-        <a href="https://capacitorjs.com" target="_blank" class="button">Read more</a>
-        <h2>Tiny Demo</h2>
-        <p>
-          This demo shows how to call Capacitor plugins. Say cheese!
-        </p>
-        <p>
-          <button class="button" id="take-photo">Take Photo</button>
-        </p>
-        <p>
-          <img id="image" style="max-width: 100%">
-        </p>
+        <h2>Demo Bg Geo</h2>
+        <div>
+          <button type="button" id="start-bg-geo" (click)="startBackgroundGeolocation()">Start</button>
+          <button type="button" id="stop-bg-geo" (click)="stopBackgroundGeolocation()">Stop</button>
+        </div>
+        <hr/>
+        <div>
+          <button type="button" id="track-for-next-3-min" (click)="trackForNextNMinutes(3)">
+            Track For Next 3 Minutes
+          </button>
+          <button type="button" id="clear-background-geo-schedule" (click)="clearBackgroundGeolocationSchedule()">
+            Clear Schedule
+          </button>
+        </div>
+        <hr/>
+        <div>
+          <button type="button" id="start-bg-geo-schedule" (click)="startBackgroundGeolocationSchedule()">
+            Start Schedule
+          </button>
+          <button type="button" id="stop-bg-geo-schedule" (click)="stopBackgroundGeolocationSchedule()">
+            Stop Schedule
+          </button>
+        </div>
       </main>
     </div>
     `;
@@ -92,21 +90,22 @@ window.customElements.define(
     connectedCallback() {
       const self = this;
 
-      self.shadowRoot.querySelector('#take-photo').addEventListener('click', async function (e) {
-        try {
-          const photo = await Camera.getPhoto({
-            resultType: 'uri',
-          });
+      self.shadowRoot.querySelector('#start-bg-geo').addEventListener('click', async function (e) {
+        console.log('Start Button clicked')
+        // try {
+        //   const photo = await Camera.getPhoto({
+        //     resultType: 'uri',
+        //   });
 
-          const image = self.shadowRoot.querySelector('#image');
-          if (!image) {
-            return;
-          }
+        //   const image = self.shadowRoot.querySelector('#image');
+        //   if (!image) {
+        //     return;
+        //   }
 
-          image.src = photo.webPath;
-        } catch (e) {
-          console.warn('User cancelled', e);
-        }
+        //   image.src = photo.webPath;
+        // } catch (e) {
+        //   console.warn('User cancelled', e);
+        // }
       });
     }
   }

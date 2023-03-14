@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">test-bg-geo</string>
+    <string name="title_activity_main">test-bg-geo</string>
+    <string name="package_name">com.example.testbggeo</string>
+    <string name="custom_url_scheme">com.example.testbggeo</string>
+</resources>
