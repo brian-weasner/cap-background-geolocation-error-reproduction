@@ -1,0 +1,11 @@
+{
+  "appId": "com.example.testbggeo",
+  "appName": "test-bg-geo",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  }
+}
