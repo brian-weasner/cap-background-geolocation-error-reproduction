@@ -1,4 +1,5 @@
 import { SplashScreen } from '@capacitor/splash-screen';
+import { BgGeoService } from './bg-geo-service';
 
 window.customElements.define(
   'capacitor-welcome',
@@ -61,24 +62,24 @@ window.customElements.define(
       <main>
         <h2>Demo Bg Geo</h2>
         <div>
-          <button type="button" id="start-bg-geo" (click)="startBackgroundGeolocation()">Start</button>
-          <button type="button" id="stop-bg-geo" (click)="stopBackgroundGeolocation()">Stop</button>
+          <button type="button" id="start-bg-geo">Start</button>
+          <button type="button" id="stop-bg-geo">Stop</button>
         </div>
         <hr/>
         <div>
           <button type="button" id="track-for-next-3-min" (click)="trackForNextNMinutes(3)">
             Track For Next 3 Minutes
           </button>
-          <button type="button" id="clear-background-geo-schedule" (click)="clearBackgroundGeolocationSchedule()">
+          <button type="button" id="clear-background-geo-schedule">
             Clear Schedule
           </button>
         </div>
         <hr/>
         <div>
-          <button type="button" id="start-bg-geo-schedule" (click)="startBackgroundGeolocationSchedule()">
+          <button type="button" id="start-bg-geo-schedule">
             Start Schedule
           </button>
-          <button type="button" id="stop-bg-geo-schedule" (click)="stopBackgroundGeolocationSchedule()">
+          <button type="button" id="stop-bg-geo-schedule">
             Stop Schedule
           </button>
         </div>
@@ -90,22 +91,49 @@ window.customElements.define(
     connectedCallback() {
       const self = this;
 
-      self.shadowRoot.querySelector('#start-bg-geo').addEventListener('click', async function (e) {
-        console.log('Start Button clicked')
-        // try {
-        //   const photo = await Camera.getPhoto({
-        //     resultType: 'uri',
-        //   });
+      const bgGeoSvc = new BgGeoService();
 
-        //   const image = self.shadowRoot.querySelector('#image');
-        //   if (!image) {
-        //     return;
-        //   }
+      self.shadowRoot.querySelector('#start-bg-geo').addEventListener('click', () => {
+        console.log('Start Button Clicked');
+        bgGeoSvc.start().catch(_ => console.error('Click Handler Catch:', _));
+      });
+      self.shadowRoot.querySelector('#stop-bg-geo').addEventListener('click', () => {
+        console.log('Stop Button Clicked');
+        bgGeoSvc.stop().catch(_ => console.error('Click Handler Catch:', _));
+      });
 
-        //   image.src = photo.webPath;
-        // } catch (e) {
-        //   console.warn('User cancelled', e);
-        // }
+      self.shadowRoot.querySelector('#track-for-next-3-min').addEventListener('click', () => {
+        const minutesToTrackFor = 3;
+        console.log(`Track for Next ${minutesToTrackFor} Min Button Clicked`);
+
+        const currentDateTime = new Date();
+        const inNMinutes = new Date();
+        inNMinutes.setMinutes(inNMinutes.getMinutes() + minutesToTrackFor);
+
+        const getDateInScheduleFormat = (date) => {
+          // yyyy-MM-dd-HH:mm
+          return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}-${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`
+        }
+
+        const scheduleItemString = `${getDateInScheduleFormat(currentDateTime)} ${getDateInScheduleFormat(inNMinutes)}`;
+
+        bgGeoSvc.addScheduleItem(scheduleItemString).then(() => {
+          console.log('Make sure to start geolocation schedule for scheduled tracking to start.');
+        }).catch(_ => console.error('Click Handler Catch:', _))
+      });
+      self.shadowRoot.querySelector('#clear-background-geo-schedule').addEventListener('click', () => {
+        console.log('Clear Schedule Button Clicked');
+        bgGeoSvc.clearSchedule().catch(_ => console.error('Click Handler Catch:', _));
+      });
+
+
+      self.shadowRoot.querySelector('#start-bg-geo-schedule').addEventListener('click', () => {
+        console.log('Start Schedule Button Clicked');
+        bgGeoSvc.startSchedule().catch(_ => console.error('Click Handler Catch:', _));
+      });
+      self.shadowRoot.querySelector('#stop-bg-geo-schedule').addEventListener('click', () => {
+        console.log('Stop Schedule Button Clicked');
+        bgGeoSvc.stopSchedule().catch(_ => console.error('Click Handler Catch:', _));
       });
     }
   }
